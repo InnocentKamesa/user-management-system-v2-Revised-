@@ -8,6 +8,7 @@ const registrationSchema = z.object({
 });
 
 export const registrationValidator = (req, res, next) => {
+    console.log(req.body)
     const {username, email, password, confirm} = req.body;
 
     //all fields required
