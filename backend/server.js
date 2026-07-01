@@ -8,8 +8,6 @@ const port = process.env.LOCAL_API_PORT || 3000;
 //server function
 async function StartServer(){
     try{
-
-    
     await sequelize.authenticate();
     console.log("Database connected!")
 

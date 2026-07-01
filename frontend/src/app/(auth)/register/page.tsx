@@ -26,7 +26,7 @@ import {useRouter} from 'next/navigation';
 
 const API_URL = "http://127.0.0.1:5000/auth/";
 
-export default function SIgnUpPage(){
+export default function SignUpPage(){
     const [formData, setFormData] = useState({username:"username is too short", email:undefined, password:undefined, confirm:""});
     const [errors, setErrors] = useState({username:"", email:"", password:""});
     const router = useRouter();
@@ -62,7 +62,6 @@ export default function SIgnUpPage(){
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(formData);
-        alert("Submitting form");
         const {username, email, password, confirm} = formData;
 
         try{
@@ -79,9 +78,22 @@ export default function SIgnUpPage(){
         body:JSON.stringify(formData)
       });
       if(!response.ok){
+        const {message, error} = await response.json();
+
+        console.log(error)
+
+        //handling 400
+        if(response.status === 400){
+          console.log(`400: ${message}`)
+        }
         throw new Error("Server did not return success");
       }
-      /*router.push("/dashboard"); */
+
+      //redirecting user
+      setTimeout( ()=>{
+        router.push("/dashboard");
+      }, 5000);
+
     } catch (error){
       console.log(error);
     }

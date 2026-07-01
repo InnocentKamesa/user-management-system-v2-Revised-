@@ -26,7 +26,7 @@ import {useRouter} from 'next/navigation';
 
 const API_URL = "http://127.0.0.1:5000/auth/";
 
-export default function SIgnUpPage(){
+export default function SignInPage(){
     const [formData, setFormData] = useState({email:undefined, password:undefined});
     const [errors, setErrors] = useState({email:"", password:""});
     const router = useRouter();
@@ -42,18 +42,15 @@ export default function SIgnUpPage(){
         setFormData(newForm);
     }
 
-    const validateFields = (username:string, email:string, password:string, confirm:string) => {
+    const validateFields = (email:string, password:string) => {
       let isValid = true;
 
+      //All fields erquired
       if (!email || !password) {
         isValid = false;
         throw new Error("All fields are required")
       }
-      //password must match
-      if (password !== confirm) {
-        isValid = false;
-        setErrors({...errors, password:"password does not match"})
-      }
+ 
       return isValid;
     }
 
@@ -61,11 +58,9 @@ export default function SIgnUpPage(){
     //calling api
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
-        alert("Submitting form");
         const {email, password} = formData;
 
-        try{
+      try{
       const isValid = validateFields( email, password);
       if(!isValid){
         throw new Error("Validation failed");
@@ -78,10 +73,17 @@ export default function SIgnUpPage(){
         credentials:"include",
         body:JSON.stringify(formData)
       });
+
+      //verifying response
       if(!response.ok){
         throw new Error("Server did not return success");
       }
-      /*router.push("/dashboard"); */
+
+      //redirecting user
+      setTimeout( () => {
+        router.push("/dashboard");
+      }, 5000);
+      
     } catch (error){
       console.log(error);
     }
