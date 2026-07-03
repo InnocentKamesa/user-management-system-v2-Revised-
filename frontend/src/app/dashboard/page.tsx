@@ -1,7 +1,11 @@
-export default function DashboardsPage() {
-    return (
-        <div className="flex min-h-screen flex-col">
-            <p>Dashboard</p>
-        </div>
-    )
+
+export default function DashboardPage() {
+
+
+  return (
+    <div>
+      <p>Hello</p>
+    </div>
+  
+  )
 }

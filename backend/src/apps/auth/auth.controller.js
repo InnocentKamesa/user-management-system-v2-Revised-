@@ -1,5 +1,5 @@
 import hash from "../../utils/hash.js";
-import {User} from "./auth.models.js";
+import {User} from "../../models/user.models.js";
 import {encode} from "../../utils/jwt.js";
 import { optional } from "zod";
 import  sequelize  from "../../config/db.js";
