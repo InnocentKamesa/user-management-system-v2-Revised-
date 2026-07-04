@@ -71,10 +71,10 @@ export default function SignUpPage(){
       }
       const response = await fetch(`${API_URL}register/`, {
         method:'POST',
+        credentials:"include",
         headers:{
           "Content-type":"application/json"
         },
-        credentials:"include",
         body:JSON.stringify(formData)
       });
       if(!response.ok){

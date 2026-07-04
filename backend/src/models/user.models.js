@@ -1,3 +1,4 @@
+import { defaultValueSchemable } from "sequelize/lib/utils";
 import sequelize from "../config/db.js";
 import { DataTypes } from "sequelize";
 
@@ -36,5 +37,13 @@ export const User = sequelize.define("users", {
         }
     }
 }, {
-    timestamps:true
+    timestamps:true,
+    defaultScope:{
+        attributes: {exclude: ['password'] }
+    },
+    scopes:{
+        withPassword:{
+            attributes:{}
+        }
+    }
 });

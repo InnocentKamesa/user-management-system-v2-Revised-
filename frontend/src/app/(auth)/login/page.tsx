@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import "../../globals.css";
 import { Button } from "@/components/ui/button";
@@ -67,10 +67,10 @@ export default function SignInPage(){
       }
       const response = await fetch(`${API_URL}login/`, {
         method:'POST',
+        credentials:'include',
         headers:{
-          "Content-type":"application/json"
+          "Content-Type":"application/json"
         },
-        credentials:"include",
         body:JSON.stringify(formData)
       });
 
