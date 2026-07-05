@@ -4,7 +4,9 @@ const registrationSchema = z.object({
     username:z.string().min(6),
     email:z.email({message: "Invalid email"}),
     password:z.string().min(8).max(20),
-    confirm:z.string().min(8).max(20)
+    confirm:z.string().min(8).max(20).optional(),
+    role:z.enum(["Administrator", "Standard", "Moderator"], {
+        errorMap: () => {{message: "Invalid role"}},}).optional()
 });
 
 const loginSchema = z.object({
@@ -33,10 +35,10 @@ export const loginValidator = (req, res, next) => {
 
 export const registrationValidator = (req, res, next) => {
     console.log(req.body)
-    const {username, email, password, confirm} = req.body;
+    const {username, email, password, confirm = null} = req.body;
 
     //all fields required
-    if(!username || !email || !password || !confirm){
+    if(!username || !email || !password){
         const err = new Error("400: all fields are required");
         err.status = 400;
         throw err;

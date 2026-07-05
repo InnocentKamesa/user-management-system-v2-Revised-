@@ -1,3 +1,4 @@
+import { defaultValueSchemable } from "sequelize/lib/utils";
 import sequelize from "../config/db.js";
 import { DataTypes } from "sequelize";
 
@@ -25,16 +26,24 @@ export const User = sequelize.define("users", {
         defaultValue:false
     },
     role:{
-        type:DataTypes.ENUM('user', 'moderator', 'admin'),
+        type:DataTypes.ENUM('Standard', 'Moderator', 'Administrator'),
         allowNull:false,
-        defaultValue:'user',
+        defaultValue:'Standard',
         validate:{
             isIn:{
-                args:[['user', 'moderator', 'admin']],
+                args:[['Standard', 'Moderator', 'Administrator']],
                 msg:'Unsupported user role'
             }
         }
     }
 }, {
-    timestamps:true
+    timestamps:true,
+    defaultScope:{
+        attributes: {exclude: ['password'] }
+    },
+    scopes:{
+        withPassword:{
+            attributes:{}
+        }
+    }
 });
