@@ -4,7 +4,9 @@ const registrationSchema = z.object({
     username:z.string().min(6),
     email:z.email({message: "Invalid email"}),
     password:z.string().min(8).max(20),
-    confirm:z.string().min(8).max(20).optional()
+    confirm:z.string().min(8).max(20).optional(),
+    role:z.enum(["Administrator", "Standard", "Moderator"], {
+        errorMap: () => {{message: "Invalid role"}},}).optional()
 });
 
 const loginSchema = z.object({

@@ -26,12 +26,12 @@ export const User = sequelize.define("users", {
         defaultValue:false
     },
     role:{
-        type:DataTypes.ENUM('user', 'moderator', 'admin'),
+        type:DataTypes.ENUM('Standard', 'Moderator', 'Administrator'),
         allowNull:false,
-        defaultValue:'user',
+        defaultValue:'Standard',
         validate:{
             isIn:{
-                args:[['user', 'moderator', 'admin']],
+                args:[['Standard', 'Moderator', 'Administrator']],
                 msg:'Unsupported user role'
             }
         }

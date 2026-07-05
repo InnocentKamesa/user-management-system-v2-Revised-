@@ -67,7 +67,13 @@ export const getUserById = async (req, res, next) => {
  */
 
 export const addUser = async (req, res, next) => {
-    const {username, email, password} = req.body;
+    const {username, email, password, role} = req.body;
+
+    //verify roole choices
+    const ROLE_CHOICES = ["Administrator", "Standard", "Moderator"];
+    if(!role || !ROLE_CHOICES.includes(role)){
+        return res.status(400).json({message:"Invalid role choice"});
+    }
 
     //check if user exists
     try{

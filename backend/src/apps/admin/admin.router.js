@@ -8,7 +8,7 @@ const adminRouter = express.Router();
 
 adminRouter.get("/user/all/", authenticate, getAll);
 adminRouter.get("/user/:id/", authenticate, allowedRoles("admin"), getUserById);
-adminRouter.post("/user/add/", authenticate, allowedRoles('admin'), registrationValidator, addUser);
+adminRouter.post("/user/add/", registrationValidator, addUser);
 
 
 export default adminRouter;

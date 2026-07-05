@@ -1,18 +1,28 @@
 "use client";
 
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 import { Button } from "@/components/ui/button"
-import { Search, Filter, Plus } from "lucide-react";
+import { Search, Filter, Plus, ChevronDown } from "lucide-react";
 import Table from "./components/table";
 import UsersPagination from "./components/pagination";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import {
     Field,
     FieldDescription,
     FieldGroup,
     FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input"
 
 
@@ -23,6 +33,50 @@ export default function UsersPage() {
     const [users, setUsers] = useState([]);
     const [addUser, setAddUser] = useState(false);
     const [pageActive, setPageActive] = useState(true);
+    const [role, setRole] = React.useState("Standard");
+    const [formData, setFormData] = useState({username:"", email:"", password:""})
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+        const fullForm = { ...formData, role: role };
+        console.log("Form data submitted:", fullForm);
+     
+
+        //call API
+        try{
+            const response = await fetch(`${API_URL}/admin/user/add/`, {
+                method:'POST',
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(fullForm)
+            });
+            if(!response.ok){
+                const errorData = await response.json();
+                if(response.status === 400){
+                    console.log("400: ", errorData.message, errorData.error)
+                }
+                throw new Error("Server did not return success")
+            }
+            setTimeout(()=>{
+                console.log("reached");
+                setLoading(false);
+                setPageActive(true);
+            }, 2000);
+        }
+         catch (error) {
+            console.error("Error: ", error)
+         }
+    }
 
     useEffect(() => {
 
@@ -73,34 +127,69 @@ export default function UsersPage() {
                 </div>
             )}
             {addUser && (
-                <form className="flex  bg-gray-100 m-auto shadow-md rounded-md p-4 max-w-[60%] max-h-[60%]">
-                    <FieldGroup>
-                        <Field>
-                            <FieldLabel htmlFor="fieldgroup-name">Username</FieldLabel>
-                            <Input id="fieldgroup-name" placeholder="Jordan Lee" />
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="fieldgroup-email">Email</FieldLabel>
-                            <Input
-                                id="fieldgroup-email"
-                                type="email"
-                                placeholder="name@example.com"
-                            />
-                            <FieldDescription>
-                                We&apos;ll send updates to this address.
-                            </FieldDescription>
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="fieldgroup-name">Password</FieldLabel>
-                            <Input id="fieldgroup-name" type="password" placeholder="Jordan Lee" />
-                        </Field>
-                        <Field orientation="horizontal">
-                            <Button type="reset" variant="outline">
-                                Reset
-                            </Button>
-                            <Button onClick={() => {setAddUser(false); setPageActive(true)}} type="submit">Submit</Button>
-                        </Field>
-                    </FieldGroup>
+                <form onSubmit={handleSubmit} className="flex fixed inset-0 z-50 items-center justify-center m-auto">
+                    <div className="absolute flex inset-0 bg-white/40 backdrop-blur-lg transition-opacity" onClick={() => { setPageActive(true); setAddUser(false) }}>
+                        <FieldGroup onClick={(e) => e.stopPropagation()} className="max-w-md w-full relative z-10 bg-white rounded-xl shadow-xl border border-gray-100 p-6 transform  transition-all m-auto">
+                            {/**Username */}
+                            <Field>
+                                <FieldLabel htmlFor="fieldgroup-name">Username</FieldLabel>
+                                <Input onChange={handleChange} required id="fieldgroup-name" placeholder="Jordan Lee" name="username" />
+                            </Field>
+
+                            {/**Email */}
+                            <Field>
+                                <FieldLabel htmlFor="fieldgroup-email">Email</FieldLabel>
+                                <Input
+                                    id="fieldgroup-email"
+                                    type="email"
+                                    onChange={handleChange}
+                                    name="email"
+                                    placeholder="name@example.com"
+                                    required
+                                />
+                                <FieldDescription>
+                                    We&apos;ll send updates to this address.
+                                </FieldDescription>
+                            </Field>
+
+                            {/**Password */}
+                            <Field>
+                                <FieldLabel htmlFor="fieldgroup-name">Password</FieldLabel>
+                                <Input onChange={handleChange} required id="fieldgroup-name" type="password" name="password" placeholder="Jordan Lee" />
+                            </Field>
+
+                            {/**Role dropdown */}
+                            <Field>
+                                <FieldLabel htmlFor="input-group-url">Role</FieldLabel>
+                                <InputGroup>
+                                    <InputGroupInput name="role" onChange={handleChange} value={role} id="input-group-url" placeholder="example.com" readOnly/>
+                                    <InputGroupAddon align="inline-end">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild><ChevronDown className="w-4 h-4" /></DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-32">
+                                                <DropdownMenuGroup>
+                                                    <DropdownMenuLabel>Roles</DropdownMenuLabel>
+                                                    <DropdownMenuRadioGroup value={role} onValueChange={setRole}>
+                                                        <DropdownMenuRadioItem value="Administrator">Administrator</DropdownMenuRadioItem>
+                                                        <DropdownMenuRadioItem value="Moderator">Moderator</DropdownMenuRadioItem>
+                                                        <DropdownMenuRadioItem value="Standard">Standard</DropdownMenuRadioItem>
+                                                    </DropdownMenuRadioGroup>
+                                                </DropdownMenuGroup>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </Field>
+
+                            {/**Submit */}
+                            <Field orientation="horizontal">
+                                <Button type="reset" variant="outline">
+                                    Reset
+                                </Button>
+                                <Button type="submit">Submit</Button>
+                            </Field>
+                        </FieldGroup>
+                    </div>
                 </form>
             )}
             {pageActive &&
@@ -149,3 +238,5 @@ export default function UsersPage() {
         </div>
     )
 }
+
+
