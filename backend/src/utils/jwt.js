@@ -5,10 +5,10 @@ dotenv.config();
 
 const SECRET = process.env.JWT_SECRET;
 //generate tokens
-export const encode = (username, email, role) => {
+export const encode = (id, username, email, role) => {
 
     //config variables
-    const payload = {username, email, role};
+    const payload = {id, username, email, role};
 
     const access = jwt.sign(payload, SECRET, {expiresIn:"15m"});
     const refresh = jwt.sign(payload, SECRET, {expiresIn:"1d"});

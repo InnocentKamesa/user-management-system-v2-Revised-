@@ -84,7 +84,7 @@ export const login = async (req, res, next) => {
         }
 
         //generate session cookies
-        const { access, refresh } = encode(user.username, user.email, user.role);
+        const { access, refresh } = encode(user.id, user.username, user.email, user.role);
 
         //set cookies
         const cookieOptions = {
