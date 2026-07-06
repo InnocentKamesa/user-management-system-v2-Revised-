@@ -64,6 +64,20 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
+              {/* User Profile */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === "/profile"}>
+                
+                <Link href="/dashboard/profile">
+                <User className="h-4 w-4 shrink-0"/>
+                <span>Profile</span>
+                </Link>
+
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+
+
               {/* Link 2: Settings */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/settings"}>
