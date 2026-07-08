@@ -47,7 +47,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={pathname === "/"}>
                   <Link href="/dashboard">
                     <Home className="h-4 w-4 shrink-0" />
-                    <span>Home</span>
+                    <span>Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -55,11 +55,6 @@ export function AppSidebar() {
               {/* User management */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/user"}>
-                
-                <Link href="/dashboard/user">
-                <User className="h-4 w-4 shrink-0"/>
-                <span>User management</span>
-                </Link>
 
                 </SidebarMenuButton>
               </SidebarMenuItem>

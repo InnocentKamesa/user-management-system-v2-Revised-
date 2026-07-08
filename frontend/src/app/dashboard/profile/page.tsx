@@ -46,7 +46,10 @@ export default function ProfilePage() {
                 setTimeout(() => {setUpdating(false);}, 1000)
             
         }
-
+        catch (error) {
+            console.error("error", error)
+        }
+        }
     }
     return (
         <div className="flex flex-col gap-4 justify-center align-center">
