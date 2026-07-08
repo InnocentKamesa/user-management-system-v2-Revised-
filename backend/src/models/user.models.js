@@ -47,3 +47,36 @@ export const User = sequelize.define("users", {
         }
     }
 });
+
+//user profiles
+export const Profile = sequelize.define("profiles", {
+    first:{
+        type:DataTypes.STRING(50),
+        allowNull:false
+    },
+    last:{
+        type:DataTypes.STRING(50),
+        allowNull:false
+    },
+    profile_url:{
+        type:DataTypes.STRING(255),
+        allowNull:true
+    },
+    phone:{
+        type:DataTypes.STRING(15),
+        allowNull:true
+    }
+},
+    {
+        timestamps:true
+    }
+);
+
+//associations
+Profile.belongsTo(User, {
+    foreignKey: 'userId',
+    onDelete: 'CASCADE',
+    onUpdate:'CASCADE'
+});
+
+User.hasOne(Profile, {foreignKey:'userId'});

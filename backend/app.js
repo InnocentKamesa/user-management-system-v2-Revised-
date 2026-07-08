@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import authRouter from "./src/apps/auth/auth.router.js";
 import adminRouter from "./src/apps/admin/admin.router.js";
+import userRouter from "./src/apps/user/user.router.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -20,13 +21,14 @@ app.use(errorHandler);
 
 //cors
 const corsOptions = {
-    origin:["http://127.0.0.1:3000", "http://localhost:3000"],
+    origin:"http://localhost:3000",
     credentials:true,
 }
 app.use(cors(corsOptions))
 
 //app routers
-app.use("/auth/", authRouter);
-app.use("/admin/", adminRouter);
+app.use("/api/auth/", authRouter);
+app.use("/api/admin/", adminRouter);
+app.use("/api/user/", userRouter);
 
 export default app;

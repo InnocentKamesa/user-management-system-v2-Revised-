@@ -4,14 +4,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider className="h-full w-full bg-gray-200">
+    <SidebarProvider className="h-full w-full bg-gray-200 ">
       <AppSidebar />
 
-      <main className="bg-white md:m-4 shadow-md rounded-md h-screen w-full">
+      <main className="bg-white md:m-4 shadow-md overflow-scroll rounded-md h-screen w-full">
 
         {/* top content */}
-        <div className="p-4 flex flex-row">
+        <div className="p-4 items-center flex flex-row">
           <SidebarTrigger className="p-2" />
+          <div>
+            <p className="text-sm pl-3 text-black/70">Dashboard /</p>
+          </div>
           <div className="flex ml-auto flex-row">
             <Avatar className="">
                <AvatarImage src="https://github.com/shadcn.png" />
