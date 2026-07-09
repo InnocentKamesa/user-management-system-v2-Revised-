@@ -91,6 +91,7 @@ export default function DashboardPage() {
         fetchUsers();
     }, [])
 
+        {/**handle submit */}
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
@@ -124,7 +125,28 @@ export default function DashboardPage() {
         }
     }
 
-
+    {/**change role */}
+    const onChangeRole = async(id, role) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${API_URL}/admin/user/change-role/`, {
+                method:"POST",
+                credentials:'include',
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({id:id, role:role})
+            });
+            if(!response.ok){
+                setLoading(false);
+                const {message} = await response.json()
+                throw new Error("failed to change user role", message)
+            }
+            setTimeout(() => {setLoading(false);window.location.reload()}, 2000);
+        } catch (error) {
+            console.error(error)
+        }
+    }
     return (
         <PageWrapper>
         <div>
@@ -238,7 +260,7 @@ export default function DashboardPage() {
                         </div>
 
                         {/** Users table */}
-                        <Table users={users} />
+                        <Table users={users} changeUserRole={onChangeRole} />
                         <UsersPagination />
                     </div>
                 </div >

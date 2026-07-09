@@ -97,3 +97,41 @@ export const addUser = async (req, res, next) => {
         next(err)
     }
 }
+
+export const changeUserRole = async (req, res, next) => {
+    const {id, role} = req.body;
+
+    //id and role required
+    if(!id || !role) {
+        returnres.status(400).json({message:"User id and user role required"})
+    }
+
+    const ALLOWED_ROLES = ["Administrator", "Moderator", "Standard"]
+
+    //user role must be known
+    if(!ALLOWED_ROLES.includes(role)) {
+        return res.status(400).json({message:"Unknown user role provided"})
+    }
+
+    //change role
+    try{
+        const user = await User.findByPk(id);
+
+        if(!user) {
+            console.log("reached")
+            return res.status(404).json({message:"User not found"});
+        }
+
+        user.set({
+            role: role
+        });
+
+        await user.save()
+
+        //return 
+        return res.status(200).json({message:"successfully changed user role"})
+    }
+    catch (error) {
+        next(error);
+    }
+}

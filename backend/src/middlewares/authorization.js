@@ -1,6 +1,7 @@
 function allowedRoles(...roles) {
     return ( (req, res, next) => {
         const {role} = req.user;
+        console.log(role);
 
         if(!role){
             return res.status(400).json({message:"User role not found"})
