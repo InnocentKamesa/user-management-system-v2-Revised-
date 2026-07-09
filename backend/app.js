@@ -6,6 +6,7 @@ import userRouter from "./src/apps/user/user.router.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
+app.use(morgan('dev'));
 
 //error handling middleware
 app.use(errorHandler);

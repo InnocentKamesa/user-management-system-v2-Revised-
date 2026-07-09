@@ -11,7 +11,8 @@ export async function registerService(username, email, password) {
     const instance = await User.create({
         username: username,
         email: email,
-        password: password_hash
+        password: password_hash,
+        is_active:true
     });
 
     const { username:user, email:userEmail, role } = instance;
