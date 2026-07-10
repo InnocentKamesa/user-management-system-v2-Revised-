@@ -15,7 +15,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div>
             <p className="text-sm pl-3 text-black/70">Dashboard /</p>
           </div>
-          <div className="flex ml-auto flex-row">
+          <div className="flex ml-auto flex-row items-center gap-4">
+            <p className="font-semibold text-sm">Admin</p>
             <Avatar className="">
                <AvatarImage src="https://github.com/shadcn.png" />
                <AvatarFallback>IK</AvatarFallback>

@@ -8,7 +8,16 @@ import {
     FieldDescription,
     FieldGroup,
     FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input"
 import React, { useState } from "react";
 import PhoneInput from "react-phone-input-2";
@@ -28,123 +37,129 @@ export default function ProfilePage() {
             setUpdating(true)
         }
         else {
-            
+
             const newForm = {
                 ...formData, phone: `+${phone}`
             }
-            try{
+            try {
                 const response = await fetch(`${API_URL}/user/profile/create/`, {
-                    method:'POST',
-                    headers:{
-                        "Content-Type":"applicetion/json"
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "applicetion/json"
                     },
-                    body:JSON.stringify(newForm)
+                    body: JSON.stringify(newForm)
                 });
-                if(!response.ok){
+                if (!response.ok) {
                     throw new Error("server did not retrun success")
                 }
-                setTimeout(() => {setUpdating(false);}, 1000)
-            
-        }
-        catch (error) {
-            console.error("error", error)
-        }
+                setTimeout(() => { setUpdating(false); }, 1000)
+
+            }
+            catch (error) {
+                console.error("error", error)
+            }
         }
     }
     return (
         <div className="flex flex-col gap-4 justify-center align-center">
-            <p className="mx-auto my-2 font-extrabold text-2xl">Profile</p>
+            <p className="my-2 font-extrabold text-2xl">Profile</p>
+
             {/**Profile Photo */}
-            <div className="flex items-center justify-center flex-col">
-
-                <Image alt="profile" src="/sample_profile.jpg" width={100} height={80} className="rounded-full shadow-lg" />
-                <div onClick={() => { alert("Under maintainance") }} className="flex text-orange-700 mt-3 flex-row gap-1 text-sm">
-                    <p className="text-sm">change photo</p>
-                    <UserPen className="h-4 w-4" />
-                </div>
-                <p className="my-1 text-lg">innocent</p>
+            <div className="flex flex-col gap-4 my-8 items-center w-full ">
+                <Image alt="proflie" src="/sample_profile.jpg" width={100} height={100} className="rounded-full h-60 w-60 shadow-full" />
+                <p className="font-semibold text-lg">innocent</p>
             </div>
+            <div className="">
+                <Card className="flex flex-col">
+                    <CardHeader className="w-full">
+                        <CardTitle>Personal Information</CardTitle>
+                        <CardDescription>Manage information the system has on you.</CardDescription>
+                        <CardAction>Edit Profile</CardAction>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={onSubmit}>
+                            <FieldGroup className="flex flex-col p-4 border border-gray-100 rounded-md shadow-md sm:max-w-sm mx-auto">
 
-            {/**Profile info */}
-            <form onSubmit={onSubmit}>
-                <FieldGroup className="flex flex-col p-4 border border-gray-100 rounded-md shadow-md sm:max-w-sm mx-auto">
+                                {/** first and last */}
+                                <div className="flex flex-row gap-3">
+                                    <Field>
+                                        <FieldLabel htmlFor="fieldgroup-name">First Name</FieldLabel>
+                                        <Input id="fieldgroup-name" name="first" placeholder="N/A" readOnly={!updating} />
+                                    </Field>
 
-                    {/** first and last */}
-                    <div className="flex flex-row gap-3">
-                        <Field>
-                            <FieldLabel htmlFor="fieldgroup-name">First Name</FieldLabel>
-                            <Input id="fieldgroup-name" name="first" placeholder="N/A" readOnly={!updating} />
-                        </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="fieldgroup-name">Last Name</FieldLabel>
+                                        <Input id="fieldgroup-name" name="last" placeholder="N/A" readOnly={!updating} />
+                                    </Field>
 
-                        <Field>
-                            <FieldLabel htmlFor="fieldgroup-name">Last Name</FieldLabel>
-                            <Input id="fieldgroup-name" name="last" placeholder="N/A" readOnly={!updating} />
-                        </Field>
+                                </div>
 
-                    </div>
+                                {/**Email */}
+                                <Field>
+                                    <FieldLabel htmlFor="fieldgroup-email">Email</FieldLabel>
+                                    <Input
+                                        id="fieldgroup-email"
+                                        type="email"
+                                        placeholder="name@example.com"
+                                        readOnly
+                                    />
 
-                    {/**Email */}
-                    <Field>
-                        <FieldLabel htmlFor="fieldgroup-email">Email</FieldLabel>
-                        <Input
-                            id="fieldgroup-email"
-                            type="email"
-                            placeholder="name@example.com"
-                            readOnly
-                        />
+                                </Field>
 
-                    </Field>
+                                {/*Phone */}
 
-                    {/*Phone */}
-                    
-                    <Field className="">
-                        <FieldLabel htmlFor="fieldgroup-email">Phone</FieldLabel>
-                        <PhoneInput
-                            id="fieldgroup-phone"
-                            type="phone"
-                            name="phone"
-                            international
-                            defaultCountry="MW"
-                            buttonStyle={{
-                                width: '48px',
-                                height: '35px',
-                                backgroundSize: '24px 18px' // Use this to force the flag sprite image to resize
-                            }}
-                            countryCallingCodeEditable={false}
-                            value={phone}
-                            onChange={setPhone}
-                            placeholder={updating ? "Enter Phone" : '+265 XXX XXX XXX'}
-                            inputProps={{
-                                readOnly: !updating && true, // Sets the phone number field to read-only
-                            }}
-                            containerClass="w-full max-w-sm"
-                        />
+                                <Field className="">
+                                    <FieldLabel htmlFor="fieldgroup-email">Phone</FieldLabel>
+                                    <PhoneInput
+                                        id="fieldgroup-phone"
+                                        type="phone"
+                                        name="phone"
+                                        international
+                                        defaultCountry="MW"
+                                        buttonStyle={{
+                                            width: '48px',
+                                            height: '35px',
+                                            backgroundSize: '24px 18px' // Use this to force the flag sprite image to resize
+                                        }}
+                                        countryCallingCodeEditable={false}
+                                        value={phone}
+                                        onChange={setPhone}
+                                        placeholder={updating ? "Enter Phone" : '+265 XXX XXX XXX'}
+                                        inputProps={{
+                                            readOnly: !updating && true, // Sets the phone number field to read-only
+                                        }}
+                                        containerClass="w-full max-w-sm"
+                                    />
 
-                    </Field>
-            
-
-                    {/**Created at */}
-                    <Field>
-                        <FieldLabel htmlFor="fieldgroup-email">Date Joined</FieldLabel>
-                        <Input
-                            id="fieldgroup-email"
-                            type="email"
-                            placeholder="2026-07-06"
-                            readOnly
-                        />
-
-                    </Field>
-
-                    <Field orientation="horizontal">
-                        <Button type='submit'>
-                            {updating ? 'Save Changes' : 'Edit Profile'}
-                        </Button>
-                    </Field>
-                </FieldGroup>
-            </form>
+                                </Field>
 
 
+                                {/**Created at */}
+                                <Field>
+                                    <FieldLabel htmlFor="fieldgroup-email">Date Joined</FieldLabel>
+                                    <Input
+                                        id="fieldgroup-email"
+                                        type="email"
+                                        placeholder="2026-07-06"
+                                        readOnly
+                                    />
+
+                                </Field>
+
+                                <Field orientation="horizontal">
+                                    <Button type='submit'>
+                                        {updating ? 'Save Changes' : 'Edit Profile'}
+                                    </Button>
+                                </Field>
+                            </FieldGroup>
+                        </form>
+
+                    </CardContent>
+                    <CardFooter>
+
+                    </CardFooter>
+                </Card>
+            </div >
         </div>
-
     )
 }
